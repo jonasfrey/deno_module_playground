@@ -1,12 +1,30 @@
 import { f_a_o_url_stack_trace } from "./f_a_o_url_stack_trace.module.js"
 
-var f_import_from_local_scope = function(){
-
-    var a_o_url_stack_trace = f_a_o_url_stack_trace();
-
-    console.log(a_o_url_stack_trace);
-
-    var o_path_file = a_o_url_stack_trace[0];
-
+var f_import_from_local_scope = async function(){
+    f_import_from_file_url("./o_config.module.js");
 }
+var f_import_from_file_url = async function(s_path_relative){
+    var s_import_meta_url = import.meta.url;
+    var s_import_meta_url_path_to_folder = s_import_meta_url.split("/").slice(0,-1).join("/")
+    var s_import_meta_url_path_to_relative_file = s_import_meta_url_path_to_folder + s_path_relative;
+    
+    //
+    var a_o_url_stack_trace = f_a_o_url_stack_trace();
+    var o_url = a_o_url_stack_trace.slice(-1)[0];
+    var s_fileurl_path = o_url.o_URL.href;
+    var s_fileurl_path_to_folder = s_fileurl_path.split("/").slice(0,-1).join("/")
+    var s_fileurl_path_to_relative_file = s_fileurl_path_to_folder + s_path_relative;
+
+    try{
+        var o_stat = Deno.stat(s_fileurl_path_to_relative_file)
+    }catch{
+        var s_response = await fetch(s_import_meta_url_path_to_relative_file);
+        await Deno.writeTextFile(s_response.body, s_fileurl_path_to_relative_file);
+        console.log(`${s_fileurl_path_to_relative_file}: file not existing yet, has been downloaded`)
+    }
+
+    var o = await import(s_fileurl_path_to_relative_file);
+}
+
+
 export {f_import_from_local_scope}

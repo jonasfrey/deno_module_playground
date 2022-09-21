@@ -1,4 +1,4 @@
-import { f_a_o_path_file_stack_trace } from "./f_a_o_path_file_stack_trace.module"
+import { f_a_o_path_file_stack_trace } from "./f_a_o_path_file_stack_trace.module.js"
 
 var f_import_from_local_scope = function(){
 

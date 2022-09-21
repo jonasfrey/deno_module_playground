@@ -1,0 +1,1 @@
+export const loadScript = baseUrl => import(new URL("./test.js", baseUrl));
